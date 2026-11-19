@@ -1,0 +1,50 @@
+
+import Note from "../Models/Note.js"
+export  async function getAllNotes(req,res) {
+  try {
+    const notes=await Note.find()
+    res.status(200).json(notes)
+  } catch (error) {
+    console.error("Error in getAllNotes controller")
+    res.status(500).json({message:"Internal Server Over"})
+  }
+}
+export   async function createNote(req,res) {
+    try {
+        const {title,content}=req.body
+        console.log(title,content);
+        const note =new Note({title,content})
+          const savedNoted = await note.save()
+         res.status(201).json(savedNoted)
+        
+    } catch (error) {
+          console.error("Error in createNote controller")
+    res.status(500).json({message:"Internal Server Over"})
+        
+    }
+}
+export  async function updateNote(req,res){
+  try {
+    const {title,content}=req.body;
+    const updataedNote =  await Note.findByIdAndUpdate(req.params.id,{title,content},{
+        new:true
+    })
+    if(!updataedNote) return res.status(404).json({message:"Note not found"})
+    res.status(200).json(updataedNote)
+  } catch (error) {
+    console.error("error in updating controller",error)
+    res.status(200).json({message:"Internal Server error"})
+  }
+
+}
+export  async function deleteNote(req,res){
+ try {
+  let deletedNote =  await Note.findByIdAndDelete(req.params.id)
+  if(!deletedNote) return res.status(404).json({message:"Note not found"})
+    res.json({message:"Note deleted Successfully!"})
+ } catch (error) {
+   console.error("error in deleteNote controller",error)
+    res.status(500).json({message:"Internal Server error"})
+ }
+}
+
