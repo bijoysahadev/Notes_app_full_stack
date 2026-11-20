@@ -1,6 +1,7 @@
 import dns from 'dns';
 dns.setServers(["8.8.8.8", "1.1.1.1"]);
 
+import cors from "cors"
 import dotenv from "dotenv"
 import express from "express"
 const app = express()
@@ -12,8 +13,14 @@ import rateLimiter from './Middleware/rateLimiter.js';
 dotenv.config()
 // middleaware
 
-app.use(express.json())
-app.use(rateLimiter)
+// app.use(cors({
+//     origin:"http://localhost:5173",
+// }))
+app.use(cors())
+app.use(express.json());
+
+// Rate limiter comes AFTER cors
+app.use(rateLimiter);
 // middleWARE
 
 
