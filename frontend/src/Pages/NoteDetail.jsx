@@ -22,8 +22,25 @@ const NoteDetail = () => {
     
    }
   }
-  let handleSave=()=>{
- 
+  let handleSave= async ()=>{
+  if(!note?.title?.trim() || !note?.content?.trim()){
+    toast.error("Please add a title or content")
+    return
+  }
+  setSaving(true)
+  try {
+    await api.put(`/notes/${id}`,note)
+    toast.success("Note Updated Successfully")
+    navigate("/")
+
+  } catch (error) {
+    console.log("Error saving the note",error);
+    toast.error("Failed to Update Note")
+    
+  }
+  finally{
+    setSaving(false)
+  }
   }
 
  useEffect(()=>{
@@ -86,7 +103,7 @@ const NoteDetail = () => {
   <div className="card-actions flex justify-end ">
     <button className='btn btn-primary ' disabled={saving} onClick={handleSave}>
       {
-        saving ?"saving..." :" saving changes "
+        saving ?"saving..." :" save changes "
       }
     </button>
 
